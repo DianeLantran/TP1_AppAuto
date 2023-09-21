@@ -35,4 +35,4 @@ df = prep.simplifyLocation(df)
 df = prep.colToOrdinal(df, ["Location", "Operator", "AC Type"])
 
 # PCA
-#cov = mathsUtils.covarianceMat(df) #decommenter apres la discretisation
+cov = mathsUtils.covarianceMat(df) #decommenter apres la discretisation
