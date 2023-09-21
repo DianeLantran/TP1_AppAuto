@@ -25,18 +25,6 @@ def simplifyLocation(df):
     df['Location'] = df['Location'].apply(getBroadestLocation)  
     return df
 
-def splitTime(time):
-    if pd.notna(time):
-        hour, minute = map(int, time.split(':'))
-    else:
-        hour = pd.NA
-    return hour
-
-def simplifyTime(df):
-    df['Hour'] = df['Time'].apply(splitTime)
-    df = df.drop('Time', axis=1)
-    return df
-
 def colToOrdinal(df, colnames):
     # Prepare encoder object
     encoder = OrdinalEncoder()
