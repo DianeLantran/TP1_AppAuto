@@ -1,6 +1,9 @@
 import pandas as pd
 
-def getMissingDataPercentageByColumn(dataset):
+
+#Traitement des colonnes
+
+def getMissingDataPercentagePerColumn(dataset):
     # Calculer le nombre de données manquantes par colonne
     missing_data = dataset.isnull().sum()
 
@@ -15,11 +18,23 @@ def getMissingDataPercentageByColumn(dataset):
     })
     return missing_data_tab
     
-    
-def deleteUselessColumns(dataset, missing_data_tab):
+def removeUselessColumns(dataset, max_percentage):
+    missing_data_tab = getMissingDataPercentagePerColumn(dataset)
     #Suppression des colonnes avec trop de valeurs nulles
     for i in range(len(missing_data_tab)):
-        if missing_data_tab.iloc[i, 2] >= 30  or missing_data_tab.iloc[i, 0] == "Summary":
+        if missing_data_tab.iloc[i, 2] >= 30:
             dataset = dataset.drop(missing_data_tab.iloc[i, 0], axis=1)
     return dataset
-            
+
+
+#Traitement des lignes
+
+def getMissingDataPercentageForOneRow(row):
+    missing_data = row.isnull().sum()
+    percentage = (missing_data / len(row)) * 100
+    return percentage
+
+def removeUselessRows(dataset, max_percentage):
+    dataset = dataset[dataset.apply(getMissingDataPercentageForOneRow, axis=1) <= max_percentage]
+    return dataset   
+
