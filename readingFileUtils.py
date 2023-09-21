@@ -1,5 +1,5 @@
 import csv
-
+import pandas as pd
 
 def getVariable(i, j, file_path):
     with open(file_path, 'r', newline='') as file:
@@ -23,3 +23,5 @@ def getVariable(i, j, file_path):
                 print(f"Row {i} does not have {j} columns.")
         else:
             print(f"Row {i} does not exist in the CSV file.")
+
+
