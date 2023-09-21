@@ -1,10 +1,15 @@
+import csv
 import readingFileUtils
 import dataTreatmentUtils
+import mathsUtils
 import pandas as pd
+from tabulate import tabulate
 import preprocessing as prep
 
-FILE_PATH = "data/AirplaneCrashes.csv"
+FILE_PATH = "AirplaneCrashes.csv"
+DATASET = pd.read_csv(FILE_PATH)
 
+#fonction pour lire les données
 i = 2
 j = 3
 try:
@@ -19,16 +24,15 @@ except Exception as e:
     
 
     
-# nettoyage des données
-df = pd.read_csv(FILE_PATH)
-#print(df)
-df = dataTreatmentUtils.removeUselessColumns(df, 30)
+# nettoyage des données (<70% de données sur lignes et colones)
+df = dataTreatmentUtils.removeUselessColumns(DATASET, 30)
 df = df.drop("Summary", axis=1)
-#print(df)
 df = dataTreatmentUtils.removeUselessRows(df, 25)
-#print(df)
 
 # Preprocessing
 df = prep.simplifyDate(df)
 df = prep.simplifyLocation(df)
 df = prep.colToOrdinal(df, ["Location", "Operator", "AC Type"])
+
+# PCA
+#cov = mathsUtils.covarianceMat(df) #decommenter apres la discretisation
