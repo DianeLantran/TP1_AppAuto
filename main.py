@@ -27,6 +27,7 @@ except Exception as e:
 # nettoyage des données (<70% de données sur lignes et colones)
 df = dataTreatmentUtils.removeUselessColumns(DATASET, 30)
 df = df.drop("Summary", axis=1)
+df = df.drop("Registration", axis=1)
 df = dataTreatmentUtils.removeUselessRows(df, 25)
 
 # Preprocessing
