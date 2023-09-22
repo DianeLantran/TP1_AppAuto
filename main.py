@@ -33,7 +33,10 @@ df = dataTreatmentUtils.removeUselessRows(df, 25)
 # Preprocessing
 df = prep.simplifyDate(df)
 df = prep.simplifyLocation(df)
-df = prep.colToOrdinal(df, ["Location", "Operator", "AC Type"])
+df = prep.simplifyRoute(df)
+df = prep.colToOrdinal(df, ["Location", "Operator", 
+                            "AC Type", "Departure", 
+                            "Arrival"])
 
 # PCA
 cov = mathsUtils.covarianceMat(df) #decommenter apres la discretisation
