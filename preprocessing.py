@@ -6,7 +6,7 @@ Created on Thu Sep 21 14:26:08 2023
 """
 import pandas as pd
 import re
-from sklearn.preprocessing import OrdinalEncoder
+from sklearn.preprocessing import OrdinalEncoder, StandardScaler
 
 
 def splitDate(date):
@@ -34,7 +34,6 @@ def splitRoute(route):
         #print(re.split(r'\s-\s', route.strip()))
     else:
         departure = arrival = float("nan")
-    print(departure, arrival)
     return departure, arrival
         
 
@@ -50,3 +49,9 @@ def colToOrdinal(df, colnames):
     # Fit and transform the selected column
     df[colnames] = encoder.fit_transform(df[colnames])
     return df
+
+def standardize(df):
+    scaler = StandardScaler()
+    df_standardized = scaler.fit_transform(df)
+    df_standardized = pd.DataFrame(df_standardized, columns=df.columns)
+    return df_standardized

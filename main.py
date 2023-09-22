@@ -36,7 +36,10 @@ df = prep.simplifyLocation(df)
 df = prep.simplifyRoute(df)
 df = prep.colToOrdinal(df, ["Location", "Operator", 
                             "AC Type", "Departure", 
-                            "Arrival"])
+                            "Arrival", "cn/ln"])
+
+# Standardization
+df = prep.standardize(df)
 
 # PCA
 cov = mathsUtils.covarianceMat(df) #decommenter apres la discretisation
