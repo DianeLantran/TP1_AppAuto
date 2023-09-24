@@ -42,4 +42,4 @@ df = prep.colToOrdinal(df, ["Location", "Operator",
 df = prep.standardize(df)
 
 # PCA
-cov = mathsUtils.covarianceMat(df) #decommenter apres la discretisation
+sorted_eigenvectors = mathsUtils.PCA(df, 0.05) #les valeurs propres < 5% ne sont pas prises en compte
