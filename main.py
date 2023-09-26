@@ -1,13 +1,11 @@
 import csv
 import readingFileUtils
+import scikit
 import dataTreatmentUtils
 import mathsUtils
 import pandas as pd
 from tabulate import tabulate
 import preprocessing as prep
-
-from sklearn.feature_selection import SelectKBest
-from sklearn.feature_selection import f_classif  # Vous pouvez utiliser une autre fonction de score
 
 FILE_PATH = "AirplaneCrashes.csv"
 DATASET = pd.read_csv(FILE_PATH)
@@ -22,18 +20,38 @@ df = dataTreatmentUtils.removeUselessRows(df, 25)
 df = prep.simplifyDate(df)
 df = prep.simplifyLocation(df)
 df = prep.simplifyRoute(df)
-df = prep.colToOrdinal(df, ["Location", "Operator", 
-                            "AC Type", "Departure", 
+df = prep.colToOrdinal(df, ["Location", "Operator",
+                            "AC Type", "Departure",
                             "Arrival", "cn/ln"])
 
 # Standardization
 df = prep.standardize(df)
 
 # PCA
-reducData_PCA = mathsUtils.PCA(df, 0.05) #les valeurs propres < 5% ne sont pas prises en compte
+# les valeurs propres < 5% ne sont pas prises en compte
+reducData_PCA = mathsUtils.PCA(df, 0.05)
 print(reducData_PCA)
+print("Size of our dataSet when using our custom-made functions: ")
+print(len(reducData_PCA))
 
-#Comparaison avec SelectKBest
-k_best = SelectKBest(score_func=f_classif, k=len(df.columns))  # k = nombre de caractéristiques souhaité
-reducData_SB = k_best.fit_transform(df, None) #étiquettes de classe cibles = None -> non supervisé
-print(reducData_SB)
+
+# #Comparaison avec SelectKBest
+# k_best = SelectKBest(score_func=f_classif, k=len(df.columns))  # k = nombre de caractéristiques souhaité
+# reducData_SB = k_best.fit_transform(df, None) #étiquettes de classe cibles = None -> non supervisé
+# print(reducData_SB)
+
+# Comparaison avec scikit-learn
+
+dfScikit = scikit.removeMostEmptyData(DATASET)
+
+dfScikit = scikit.preprocessing(dfScikit)
+
+dfScikit = scikit.standardization(dfScikit)
+
+dfScikit = scikit.fillNA(dfScikit)
+
+dfScikit = scikit.applyPCA(dfScikit)
+
+# Get the number of rows (samples) in the reduced data
+num_samples = dfScikit.shape[0]
+print(num_samples)
