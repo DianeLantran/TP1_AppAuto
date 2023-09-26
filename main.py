@@ -1,35 +1,54 @@
-import csv
-import readingFileUtils
 import scikit
 import dataTreatmentUtils
 import mathsUtils
 import pandas as pd
-from tabulate import tabulate
 import preprocessing as prep
+from sklearn.feature_selection import SelectKBest
+from sklearn.feature_selection import f_classif  # Vous pouvez utiliser une autre fonction de score
 
+# Load file
 FILE_PATH = "AirplaneCrashes.csv"
 DATASET = pd.read_csv(FILE_PATH)
 
-# nettoyage des données (<70% de données sur lignes et colones)
-df = dataTreatmentUtils.removeUselessColumns(DATASET, 30)
-df = df.drop("Summary", axis=1)
-df = df.drop("Registration", axis=1)
+# Columns renaming
+column_name_mapping = {
+    'Aboard': 'Total aboard',
+    'Aboard Passangers': 'Passengers aboard',
+    'Aboard Crew': 'Crew aboard',
+    'Fatalities': 'Total fatalities',
+    'Fatalities Passangers': 'Passengers fatalities',
+    'Fatalities Crew': 'Crew fatalities'
+}
+
+# Rename the columns using the mapping
+df = DATASET.rename(columns=column_name_mapping)
+save = df.copy()
+# Missing data deletion
+# Removing columns with more than 30% NA values
+df = dataTreatmentUtils.removeUselessColumns(df, 30)
+# Removing unprocessable columns
+df = df.drop(["Summary", "Registration"], axis=1)
+# Removing rows with more than 25% NA values
 df = dataTreatmentUtils.removeUselessRows(df, 25)
 
-# Preprocessing
+# Discretization
 df = prep.simplifyDate(df)
 df = prep.simplifyLocation(df)
 df = prep.simplifyRoute(df)
-df = prep.colToOrdinal(df, ["Location", "Operator",
-                            "AC Type", "Departure",
-                            "Arrival", "cn/ln"])
+
+# Missing data replacement
+df = prep.replaceMissingCrewPassengers(df)
+
+# Ordinal columns encoding
+missing_values_mask = df.isnull().any()
+cols_with_missing_values = missing_values_mask[missing_values_mask].index.tolist()
+df = prep.encodeOrdinalColumns(df, cols_with_missing_values + ["Location"])
 
 # Standardization
 df = prep.standardize(df)
 
 # PCA
-# les valeurs propres < 5% ne sont pas prises en compte
-reducData_PCA = mathsUtils.PCA(df, 0.05)
+reducData_PCA = mathsUtils.PCA(df, 0.05) #les valeurs propres < 5% ne sont pas prises en compte
 print(reducData_PCA)
 print("Size of our dataSet when using our custom-made functions: ")
 print(len(reducData_PCA))
