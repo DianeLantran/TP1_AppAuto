@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Mon Sep 25 01:04:09 2023
-
-@author: basil
-"""
-
 import pandas as pd
 import matplotlib.pyplot as plt
 import preprocessing as prep
@@ -115,11 +109,9 @@ def plotPie(data, title, threshold = 0):
     value_counts = value_counts[value_counts >= threshold]
     
     # Plot a pie chart
-    plt.figure(figsize=(20, 20))
     plt.pie(value_counts, labels=value_counts.index, autopct='%1.1f%%',
             textprops={'fontsize': 14})
     plt.title(title)
-    plt.show()
     
 def plotUniqueValues(df):
 
@@ -153,7 +145,23 @@ df = prep.simplifyLocation(df)
 plotDateHist(df)
 plotTimeHist(df)
 plotNA(df)
+fig, axs = plt.subplots(1, 1, figsize=(20, 20))
 plotPie(df["Location"], "Repartition of the crash location", 1.5)
+plt.show()
+fig, axs = plt.subplots(1, 1, figsize=(20, 20))
 plotPie(df["Operator"], "Repartition of the airplane operators", 0.9)
-simplifyRoute(df)
+plt.show()
+df = prep.simplifyRoute(df)
+fig, axs = plt.subplots(1, 2, figsize=(20, 20))
+plt.sca(axs[0])
+plotPie(df["Departure"], "Repartition of the flight departures", 0.7)
+plt.sca(axs[1])
+plotPie(df["Arrival"], "Repartition of the flight arrivals", 0.7)
+plt.tight_layout()
+plt.show()
+
+fig, axs = plt.subplots(1, 1, figsize=(20, 20))
+plotPie(df["AC Type"], "Repartition of the aircraft types", 0.7)
+plt.show()
+
 plotUniqueValues(df)

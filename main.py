@@ -21,7 +21,7 @@ column_name_mapping = {
 
 # Rename the columns using the mapping
 df = df.rename(columns=column_name_mapping)
-    
+save = df.copy()
 # Missing data deletion
 # Removing columns with more than 30% NA values
 df = dataTreatmentUtils.removeUselessColumns(df, 30)
