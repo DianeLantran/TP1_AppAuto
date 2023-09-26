@@ -46,7 +46,6 @@ def PCA(dataset, threshold):
     dim_red(threshold, eigenvalues, eigenvectors) #met à 0 les colonnes trop peu significatives
     sorted_eigenvectors = sort_vectP(eigenvalues, eigenvectors)
     featureVect = remove_zero_columns(sorted_eigenvectors)
-    print(featureVect)
     newData = np.dot(dataset, featureVect)
     return(newData)
 
