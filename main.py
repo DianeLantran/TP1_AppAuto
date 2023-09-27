@@ -6,6 +6,7 @@ import preprocessing as prep
 import time
 import comparaison
 import kbest
+import matplotlib.pyplot as plt
 from sklearn.feature_selection import SelectKBest
 # Vous pouvez utiliser une autre fonction de score
 from sklearn.feature_selection import f_classif
@@ -52,7 +53,7 @@ df = prep.standardize(df)
 # PCA
 start_time = time.time()
 # les valeurs propres < 5% ne sont pas prises en compte
-reducData_PCA = mathsUtils.PCA(df, 0.8)
+reducData_PCA = mathsUtils.PCA(df, 0.9)
 end_time = time.time()
 elapsed_time1 = end_time - start_time
 len1 = len(reducData_PCA)
@@ -64,6 +65,16 @@ print(f"Durée écoulée : {elapsed_time1} secondes")
 # k_best = SelectKBest(score_func=f_classif, k=len(df.columns))  # k = nombre de caractéristiques souhaité
 # reducData_SB = k_best.fit_transform(df, None) #étiquettes de classe cibles = None -> non supervisé
 # print(reducData_SB)
+
+# Visualisation du nouveau dataset
+reduced_df = pd.DataFrame(reducData_PCA)
+fig = plt.figure()
+ax = fig.add_subplot(111)
+ax.scatter(reduced_df[reduced_df.columns[0]], reduced_df[reduced_df.columns[1]])
+ax.set_xlabel('Principal Component 1')
+ax.set_ylabel('Principal Component 2')
+ax.set_title('Visualization of data')
+plt.show()
 
 # Comparaison avec scikit-learn
 
