@@ -1,3 +1,4 @@
+import scikit
 import dataTreatmentUtils
 import mathsUtils
 import pandas as pd
@@ -7,7 +8,7 @@ from sklearn.feature_selection import f_classif  # Vous pouvez utiliser une autr
 
 # Load file
 FILE_PATH = "AirplaneCrashes.csv"
-df = pd.read_csv(FILE_PATH)
+DATASET = pd.read_csv(FILE_PATH)
 
 # Columns renaming
 column_name_mapping = {
@@ -20,7 +21,7 @@ column_name_mapping = {
 }
 
 # Rename the columns using the mapping
-df = df.rename(columns=column_name_mapping)
+df = DATASET.rename(columns=column_name_mapping)
 save = df.copy()
 # Missing data deletion
 # Removing columns with more than 30% NA values
@@ -49,8 +50,27 @@ df = prep.standardize(df)
 # PCA
 reducData_PCA = mathsUtils.PCA(df, 0.05) #les valeurs propres < 5% ne sont pas prises en compte
 print(reducData_PCA)
+print("Size of our dataSet when using our custom-made functions: ")
+print(len(reducData_PCA))
 
-#Comparaison avec SelectKBest
-k_best = SelectKBest(score_func=f_classif, k=len(df.columns))  # k = nombre de caractéristiques souhaité
-reducData_SB = k_best.fit_transform(df, None) #étiquettes de classe cibles = None -> non supervisé
-print(reducData_SB)
+
+# #Comparaison avec SelectKBest
+# k_best = SelectKBest(score_func=f_classif, k=len(df.columns))  # k = nombre de caractéristiques souhaité
+# reducData_SB = k_best.fit_transform(df, None) #étiquettes de classe cibles = None -> non supervisé
+# print(reducData_SB)
+
+# Comparaison avec scikit-learn
+
+dfScikit = scikit.removeMostEmptyData(DATASET)
+
+dfScikit = scikit.preprocessing(dfScikit)
+
+dfScikit = scikit.standardization(dfScikit)
+
+dfScikit = scikit.fillNA(dfScikit)
+
+dfScikit = scikit.applyPCA(dfScikit)
+
+# Get the number of rows (samples) in the reduced data
+num_samples = dfScikit.shape[0]
+print(num_samples)
