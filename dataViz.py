@@ -183,6 +183,15 @@ def studyDataSet():
     plotUniqueValues(df)
 
 
+def scatterAboardFatalities(df):
+    plt.scatter(df["Aboard"], df["Fatalities"])
+    plt.xlabel('Number of person aboard')
+    plt.ylabel('Number of fatalities')
+    plt.title(
+        'Scatter plot of the number of person aboard vs. the number of fatalities')
+    plt.show()
+
+
 def plotDataSet(data):
     """ 
     Plot a 2D graph form the 2 first columns of a numpy array 
