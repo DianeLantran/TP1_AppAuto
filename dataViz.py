@@ -147,6 +147,30 @@ def plotUniqueValues(df):
     plt.show()
 
 
+def scatterAboardFatalities(df):
+    plt.scatter(df["Aboard"], df["Fatalities"])
+    plt.xlabel('Number of person aboard')
+    plt.ylabel('Number of fatalities')
+    plt.title(
+        'Scatter plot of the number of person aboard vs. the number of fatalities')
+    plt.show()
+
+
+def plotDataSet(data):
+    """ 
+    Plot a 2D graph form the 2 first columns of a numpy array 
+    """
+    reduced_df = pd.DataFrame(data)
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    ax.scatter(reduced_df[reduced_df.columns[0]],
+               reduced_df[reduced_df.columns[1]])
+    ax.set_xlabel('Principal Component 1')
+    ax.set_ylabel('Principal Component 2')
+    ax.set_title('Visualization of data')
+    plt.show()
+
+
 def studyDataSet():
     """
     Plot various graphs allowing a study of the dataSet
@@ -181,27 +205,4 @@ def studyDataSet():
     plt.show()
 
     plotUniqueValues(df)
-
-
-def scatterAboardFatalities(df):
-    plt.scatter(df["Aboard"], df["Fatalities"])
-    plt.xlabel('Number of person aboard')
-    plt.ylabel('Number of fatalities')
-    plt.title(
-        'Scatter plot of the number of person aboard vs. the number of fatalities')
-    plt.show()
-
-
-def plotDataSet(data):
-    """ 
-    Plot a 2D graph form the 2 first columns of a numpy array 
-    """
-    reduced_df = pd.DataFrame(data)
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
-    ax.scatter(reduced_df[reduced_df.columns[0]],
-               reduced_df[reduced_df.columns[1]])
-    ax.set_xlabel('Principal Component 1')
-    ax.set_ylabel('Principal Component 2')
-    ax.set_title('Visualization of data')
-    plt.show()
+    scatterAboardFatalities(df)
