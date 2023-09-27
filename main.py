@@ -3,10 +3,13 @@ import dataTreatmentUtils
 import mathsUtils
 import pandas as pd
 import preprocessing as prep
+import time
+import comparaison
+import kbest
 from sklearn.feature_selection import SelectKBest
 # Vous pouvez utiliser une autre fonction de score
 from sklearn.feature_selection import f_classif
-import time
+from sklearn.feature_selection import SelectKBest
 
 
 # Load file
@@ -35,17 +38,13 @@ df = df.drop(["Summary", "Registration"], axis=1)
 df = dataTreatmentUtils.removeUselessRows(df, 25)
 
 # Discretization
-df = prep.simplifyDate(df)
-df = prep.simplifyLocation(df)
-df = prep.simplifyRoute(df)
+df = prep.discretization(df)
 
 # Missing data replacement
 df = prep.replaceMissingCrewPassengers(df)
 
 # Ordinal columns encoding
-missing_values_mask = df.isnull().any()
-cols_with_missing_values = missing_values_mask[missing_values_mask].index.tolist()
-df = prep.encodeOrdinalColumns(df, cols_with_missing_values + ["Location"])
+df = prep.encodeOrdinalColumns(df)
 
 # Standardization
 df = prep.standardize(df)
@@ -77,7 +76,7 @@ dfScikit = scikit.standardization(dfScikit)
 dfScikit = scikit.fillNA(dfScikit)
 
 start_time = time.time()
-dfScikit = scikit.applyPCA(dfScikit)
+dfScikit = scikit.applyPCA(df)
 end_time = time.time()
 elapsed_time2 = end_time - start_time
 
@@ -87,3 +86,19 @@ print(
     f"Size of our dataSet when using scikit functions: {num_samples}")
 # Affichez la durée écoulée
 print(f"Durée écoulée : {elapsed_time2} secondes")
+
+comparaison.colonnes(df)
+comparaison.colonnes(dfScikit)
+comparaison.colonnes(reducData_PCA)
+# comparaison.correlation(df, "bfore PCA")
+# comparaison.correlation(dfScikit, "with Scikit")
+# comparaison.correlation(reducData_PCA, "with custom function")
+
+# Kbest
+start_time = time.time()
+df_kbest = kbest.crop(df)
+end_time = time.time()
+elapsed_time3 = end_time - start_time
+print(f"Durée écoulée : {elapsed_time3} secondes")
+print(df_kbest.dtypes)
+comparaison.correlation(df_kbest, "with k-best using chi2")

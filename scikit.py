@@ -24,10 +24,7 @@ def preprocessing(df):
     df = prep.simplifyLocation(df)
     df = prep.simplifyRoute(df)
     # Scikit Encoder
-    missing_values_mask = df.isnull().any()
-    cols_with_missing_values = missing_values_mask[missing_values_mask].index.tolist(
-    )
-    df = prep.encodeOrdinalColumns(df, cols_with_missing_values + ["Location"])
+    df = prep.encodeOrdinalColumns(df)
     return df
 
 
@@ -46,8 +43,7 @@ def fillNA(df):
 
 
 def applyPCA(df):
-    # PCA with explained variance threshold (5% in your case)
-    explained_variance_threshold = 0.05
+    explained_variance_threshold = 0.8
     pca = PCA(explained_variance_threshold)
     # Fit PCA and transform the data (corrected)
     reducData_PCA = pca.fit_transform(df)
