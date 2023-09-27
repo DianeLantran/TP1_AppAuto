@@ -36,7 +36,8 @@ def PCA(dataset, threshold):
     cov = covarianceMat(dataset)
     eigenvalues, eigenvectors = vect_P(cov)
     featureVect, new_eigen_values = dim_red(threshold, eigenvalues, eigenvectors)
-    newData = np.dot(dataset, np.array(featureVect).T)
+    sorted_eigenvectors = sort_vectP(new_eigen_values, featureVect)
+    newData = np.dot(dataset, np.array(sorted_eigenvectors).T)
     return(newData)
 
 

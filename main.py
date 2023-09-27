@@ -25,7 +25,6 @@ column_name_mapping = {
 
 # Rename the columns using the mapping
 df = DATASET.rename(columns=column_name_mapping)
-save = df.copy()
 
 # Missing data deletion
 # Removing columns with more than 30% NA values
@@ -56,6 +55,7 @@ df = prep.standardize(df)
 start_time = time.time()
 # les valeurs propres < 5% ne sont pas prises en compte
 reducData_PCA = mathsUtils.PCA(df, 0.05)
+print(reducData_PCA.shape)
 end_time = time.time()
 elapsed_time1 = end_time - start_time
 len1 = len(reducData_PCA)

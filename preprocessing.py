@@ -2,7 +2,7 @@
 import pandas as pd
 import re
 import numpy as np
-from sklearn.preprocessing import OrdinalEncoder, RobustScaler
+from sklearn.preprocessing import OrdinalEncoder, RobustScaler, StandardScaler
 
 def splitDate(date):
     """
@@ -120,7 +120,7 @@ def encodeOrdinalColumns(df, colnames):
 
 def standardize(df):
     """
-    Standardizes the dataframe with a robust scaler
+    Standardizes the dataframe with a standard standardization
 
     Parameters:
     df: The Dataframe to standardize
@@ -128,10 +128,10 @@ def standardize(df):
     Returns:
     Dataframe: The updated Dataframe.
     """
-    scaler = RobustScaler()
-    df_standardized = scaler.fit_transform(df)
-    df_standardized = pd.DataFrame(df_standardized, columns=df.columns)
-    return df_standardized
+    column_means = df.mean()
+    column_std = df.std()
+    standardized_df = (df - column_means) / column_std
+    return standardized_df
 
 def replaceMissingCrewPassengers(df):
     """
