@@ -3,6 +3,7 @@ import dataTreatmentUtils
 import mathsUtils
 import pandas as pd
 import preprocessing as prep
+import matplotlib.pyplot as plt
 from sklearn.feature_selection import SelectKBest
 # Vous pouvez utiliser une autre fonction de score
 from sklearn.feature_selection import f_classif
@@ -68,6 +69,28 @@ print(f"Durée écoulée : {elapsed_time1} secondes")
 # k_best = SelectKBest(score_func=f_classif, k=len(df.columns))  # k = nombre de caractéristiques souhaité
 # reducData_SB = k_best.fit_transform(df, None) #étiquettes de classe cibles = None -> non supervisé
 # print(reducData_SB)
+
+# Visualisation du nouveau dataset
+reduced_df = pd.DataFrame(reducData_PCA, columns=['Colonne1', 'Colonne2', 'Colonne3', 'Colonne4', 'Colonne5', 'Colonne6', 'Colonne7', 'Colonne8', 'Colonne9'])
+fig = plt.figure()
+ax = fig.add_subplot(111)
+ax.scatter(reduced_df['Colonne8'], reduced_df['Colonne9'])
+ax.set_xlabel('Colonne1')
+ax.set_ylabel('Colonne2')
+plt.show()
+
+variance_origin = df.describe().iloc[2,:]
+variance_pca = reduced_df.describe().iloc[2,:]
+print(variance_origin)
+print(variance_pca)
+
+plt.stem(variance_origin)
+plt.title("Variance des colonnes du dataset avant PCA")
+plt.show()
+
+plt.stem(variance_pca)
+plt.title("Variance des colonnes du dataset après PCA")
+plt.show()
 
 # Comparaison avec scikit-learn
 
