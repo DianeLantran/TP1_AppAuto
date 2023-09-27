@@ -7,7 +7,6 @@ Created on Thu Sep 21 2023
 import numpy as np
 from scipy.linalg import eigh
 
-
 def covarianceMat(dataset):
     covM = dataset.cov()
     return covM
@@ -19,7 +18,7 @@ def dim_red(threshold, eigenvalues, eigenvectors):
     total = 0
     i = 0
     while total < threshold:
-        valid_eigenvectors.append(eigenvectors[:,i].tolist())
+        valid_eigenvectors.append(eigenvectors[i].tolist())
         valid_eigenvalues.append(eigenvalues[i])
         total += eigenvalues[i]/sum_eigenvalues
         i += 1

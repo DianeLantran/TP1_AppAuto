@@ -44,8 +44,7 @@ df = prep.replaceMissingCrewPassengers(df)
 
 # Ordinal columns encoding
 missing_values_mask = df.isnull().any()
-cols_with_missing_values = missing_values_mask[missing_values_mask].index.tolist(
-)
+cols_with_missing_values = missing_values_mask[missing_values_mask].index.tolist()
 df = prep.encodeOrdinalColumns(df, cols_with_missing_values + ["Location"])
 
 # Standardization
@@ -61,7 +60,6 @@ len1 = len(reducData_PCA)
 print(f"Size of our dataSet when using our custom-made functions: {len1}")
 # Affichez la durée écoulée
 print(f"Durée écoulée : {elapsed_time1} secondes")
-
 
 # #Comparaison avec SelectKBest
 # k_best = SelectKBest(score_func=f_classif, k=len(df.columns))  # k = nombre de caractéristiques souhaité
