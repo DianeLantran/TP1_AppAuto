@@ -4,6 +4,9 @@ from scipy.stats import chi2_contingency
 
 
 def crop(df):
+    """
+    Select the 8 best column from a dataSet based on the chi2 method
+    """
     k = 8  # Number of columns to keep
     chi2_scores = []
     for col1 in df.columns:

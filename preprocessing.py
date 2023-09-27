@@ -3,6 +3,7 @@ import pandas as pd
 import re
 import numpy as np
 from sklearn.preprocessing import OrdinalEncoder
+import dataTreatmentUtils
 
 
 def splitDate(date):
@@ -217,4 +218,36 @@ def discretization(df):
     df = simplifyDate(df)
     df = simplifyLocation(df)
     df = simplifyRoute(df)
+    return (df)
+
+
+def removeMostEmptyData(df):
+    # Removing columns with more than 30% NA values
+    df = dataTreatmentUtils.removeUselessColumns(df, 30)
+    # Removing unprocessable columns
+    f = df.drop(["Summary", "Registration"], axis=1)
+    # Removing rows with more than 25% NA values
+    df = dataTreatmentUtils.removeUselessRows(df, 25)
+    return (df)
+
+
+def preprocess(DATASET):
+    # Columns renaming
+    column_name_mapping = {
+        'Aboard': 'Total aboard',
+        'Aboard Passangers': 'Passengers aboard',
+        'Aboard Crew': 'Crew aboard',
+        'Fatalities': 'Total fatalities',
+        'Fatalities Passangers': 'Passengers fatalities',
+        'Fatalities Crew': 'Crew fatalities'
+    }
+
+    # Rename the columns using the mapping
+    df = DATASET.rename(columns=column_name_mapping)
+
+    df = removeMostEmptyData(df)
+    df = discretization(df)
+    df = replaceMissingCrewPassengers(df)
+    df = encodeOrdinalColumns(df)
+    df = standardize(df)
     return (df)
