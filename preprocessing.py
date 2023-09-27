@@ -222,6 +222,15 @@ def discretization(df):
 
 
 def removeMostEmptyData(df):
+    """
+    Remove columns and lines that holds too many NA values to be useful
+
+    Arguments: 
+    df: panda dataFrame
+
+    Returns: 
+    df: panda dataFrame
+    """
     # Removing columns with more than 30% NA values
     df = dataTreatmentUtils.removeUselessColumns(df, 30)
     # Removing unprocessable columns
@@ -232,6 +241,15 @@ def removeMostEmptyData(df):
 
 
 def preprocess(DATASET):
+    """
+    Do all preprocessing needed for this dataset
+
+    Arguments : 
+    DATASET: panda DataFrame
+
+    Returns: 
+    df: panda DataFrame 
+    """
     # Columns renaming
     column_name_mapping = {
         'Aboard': 'Total aboard',
