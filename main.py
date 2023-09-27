@@ -54,8 +54,7 @@ df = prep.standardize(df)
 # PCA
 start_time = time.time()
 # les valeurs propres < 5% ne sont pas prises en compte
-reducData_PCA = mathsUtils.PCA(df, 0.05)
-print(reducData_PCA.shape)
+reducData_PCA = mathsUtils.PCA(df, 0.8)
 end_time = time.time()
 elapsed_time1 = end_time - start_time
 len1 = len(reducData_PCA)
