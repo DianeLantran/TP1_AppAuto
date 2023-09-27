@@ -140,6 +140,8 @@ def plotUniqueValues(df):
     
 FILE_PATH = "AirplaneCrashes.csv"
 df = pd.read_csv(FILE_PATH)
+plotNA(df)
+
 plotUniqueValues(df)
 df = prep.simplifyLocation(df)
 plotDateHist(df)
