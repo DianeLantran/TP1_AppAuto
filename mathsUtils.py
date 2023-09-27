@@ -11,15 +11,18 @@ from scipy.linalg import eigh
 
 def covarianceMat(dataset):
     covM = dataset.cov()
+    len(covM)
     return covM
 
 def dim_red(threshold, eigenvalues, eigenvectors):
     tot = sum(eigenvalues)
+    valid_eigenvectors = []
+    valid_eigenvalues = []
     for i in range(len(eigenvalues)):
-        if eigenvalues[i]/tot < threshold :
-            eigenvalues[i] = 0
-            eigenvectors[:,i] = np.zeros((len(eigenvectors[:,i]),))
-    return 
+        if eigenvalues[i]/tot > threshold :
+            valid_eigenvectors.append(eigenvectors[:,i].tolist())
+            valid_eigenvalues.append(eigenvalues[i])
+    return valid_eigenvectors, valid_eigenvalues
 
 def vect_P(matrix):
     eigenvalues, eigenvectors = eigh(matrix)
@@ -27,9 +30,8 @@ def vect_P(matrix):
 
 def sort_vectP(eigenvalues, eigenvectors):
     #trie les vecteurs propres par ordre décroissants des valeur propres correspondantes
-    eigen_pairs = [(eigenvalues[i], eigenvectors[:, i]) for i in range(len(eigenvalues))]
-    eigen_pairs.sort(key=lambda x: x[0], reverse=True)
-    sorted_eigenvectors = np.array([pair[1] for pair in eigen_pairs]).T
+    sorted_indices = np.argsort(eigenvalues)[::-1]  # Sort A and get indices in descending order
+    sorted_eigenvectors = np.array(eigenvectors)[sorted_indices]
     return(sorted_eigenvectors)
 
 def remove_zero_columns(matrix):
@@ -43,10 +45,8 @@ def remove_zero_columns(matrix):
 def PCA(dataset, threshold):
     cov = covarianceMat(dataset)
     eigenvalues, eigenvectors = vect_P(cov)
-    dim_red(threshold, eigenvalues, eigenvectors) #met à 0 les colonnes trop peu significatives
-    sorted_eigenvectors = sort_vectP(eigenvalues, eigenvectors)
-    featureVect = remove_zero_columns(sorted_eigenvectors)
-    newData = np.dot(dataset, featureVect)
+    featureVect, new_eigen_values = dim_red(threshold, eigenvalues, eigenvectors)
+    newData = np.dot(featureVect, dataset.T)
     return(newData)
 
 
