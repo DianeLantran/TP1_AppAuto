@@ -2,7 +2,7 @@
 import pandas as pd
 import re
 import numpy as np
-from sklearn.preprocessing import OrdinalEncoder, RobustScaler, StandardScaler
+from sklearn.preprocessing import OrdinalEncoder
 
 def splitDate(date):
     """
@@ -182,4 +182,3 @@ def replaceMissingCrewPassengers(df):
     df['Passengers aboard'] = df['Passengers aboard'].fillna(df['Total aboard'] - df["Crew aboard"])
     df['Passengers fatalities'] = df['Passengers fatalities'].fillna(df['Total fatalities'] - df["Crew fatalities"])
     return df
-
