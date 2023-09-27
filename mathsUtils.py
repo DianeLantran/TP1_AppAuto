@@ -13,13 +13,16 @@ def covarianceMat(dataset):
     return covM
 
 def dim_red(threshold, eigenvalues, eigenvectors):
-    tot = sum(eigenvalues)
+    sum_eigenvalues = sum(eigenvalues)
     valid_eigenvectors = []
     valid_eigenvalues = []
-    for i in range(len(eigenvalues)):
-        if eigenvalues[i]/tot > threshold :
-            valid_eigenvectors.append(eigenvectors[:,i].tolist())
-            valid_eigenvalues.append(eigenvalues[i])
+    total = 0
+    i = 0
+    while total < threshold:
+        valid_eigenvectors.append(eigenvectors[:,i].tolist())
+        valid_eigenvalues.append(eigenvalues[i])
+        total += eigenvalues[i]/sum_eigenvalues
+        i += 1
     return valid_eigenvectors, valid_eigenvalues
 
 def vect_P(matrix):
@@ -28,16 +31,16 @@ def vect_P(matrix):
 
 def sort_vectP(eigenvalues, eigenvectors):
     #trie les vecteurs propres par ordre décroissants des valeur propres correspondantes
-    sorted_indices = np.argsort(eigenvalues)[::-1]  # Sort A and get indices in descending order
-    sorted_eigenvectors = np.array(eigenvectors)[sorted_indices]
-    return(sorted_eigenvectors)
+    sorted_indices, sorted_eigenvalues = zip(*sorted(enumerate(eigenvalues),
+                                                     key=lambda x: x[1],
+                                                     reverse=True))
+    sorted_eigenvectors = eigenvectors[np.array(sorted_indices)]
+    return(sorted_eigenvalues, sorted_eigenvectors)
 
 def PCA(dataset, threshold):
     cov = covarianceMat(dataset)
     eigenvalues, eigenvectors = vect_P(cov)
-    featureVect, new_eigen_values = dim_red(threshold, eigenvalues, eigenvectors)
-    sorted_eigenvectors = sort_vectP(new_eigen_values, featureVect)
-    newData = np.dot(dataset, np.array(sorted_eigenvectors).T)
+    sorted_eigenvalues, sorted_eigenvectors = sort_vectP(eigenvalues, eigenvectors)
+    featureVect, new_eigen_values = dim_red(threshold, sorted_eigenvalues, sorted_eigenvectors)
+    newData = np.dot(dataset, np.array(featureVect).T)
     return(newData)
-
-
