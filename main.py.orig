@@ -1,17 +1,23 @@
+<<<<<<< HEAD
+import csv
+import readingFileUtils
 import scikit
+=======
+>>>>>>> 3988dfe1e97bd6844ab2778baca92773d84ffb71
 import dataTreatmentUtils
 import mathsUtils
 import pandas as pd
 import preprocessing as prep
-from sklearn.feature_selection import SelectKBest
-# Vous pouvez utiliser une autre fonction de score
-from sklearn.feature_selection import f_classif
-import time
+<<<<<<< HEAD
 
+=======
+from sklearn.feature_selection import SelectKBest
+from sklearn.feature_selection import f_classif  # Vous pouvez utiliser une autre fonction de score
 
 # Load file
+>>>>>>> 3988dfe1e97bd6844ab2778baca92773d84ffb71
 FILE_PATH = "AirplaneCrashes.csv"
-DATASET = pd.read_csv(FILE_PATH)
+df = pd.read_csv(FILE_PATH)
 
 # Columns renaming
 column_name_mapping = {
@@ -24,7 +30,7 @@ column_name_mapping = {
 }
 
 # Rename the columns using the mapping
-df = DATASET.rename(columns=column_name_mapping)
+df = df.rename(columns=column_name_mapping)
 save = df.copy()
 # Missing data deletion
 # Removing columns with more than 30% NA values
@@ -38,29 +44,30 @@ df = dataTreatmentUtils.removeUselessRows(df, 25)
 df = prep.simplifyDate(df)
 df = prep.simplifyLocation(df)
 df = prep.simplifyRoute(df)
+<<<<<<< HEAD
+df = prep.colToOrdinal(df, ["Location", "Operator",
+                            "AC Type", "Departure",
+                            "Arrival", "cn/ln"])
+=======
 
 # Missing data replacement
 df = prep.replaceMissingCrewPassengers(df)
 
 # Ordinal columns encoding
 missing_values_mask = df.isnull().any()
-cols_with_missing_values = missing_values_mask[missing_values_mask].index.tolist(
-)
+cols_with_missing_values = missing_values_mask[missing_values_mask].index.tolist()
 df = prep.encodeOrdinalColumns(df, cols_with_missing_values + ["Location"])
+>>>>>>> 3988dfe1e97bd6844ab2778baca92773d84ffb71
 
 # Standardization
 df = prep.standardize(df)
 
 # PCA
-start_time = time.time()
 # les valeurs propres < 5% ne sont pas prises en compte
 reducData_PCA = mathsUtils.PCA(df, 0.05)
-end_time = time.time()
-elapsed_time1 = end_time - start_time
-len1 = len(reducData_PCA)
-print(f"Size of our dataSet when using our custom-made functions: {len1}")
-# Affichez la durée écoulée
-print(f"Durée écoulée : {elapsed_time1} secondes")
+print(reducData_PCA)
+print("Size of our dataSet when using our custom-made functions: ")
+print(len(reducData_PCA))
 
 
 # #Comparaison avec SelectKBest
@@ -78,14 +85,8 @@ dfScikit = scikit.standardization(dfScikit)
 
 dfScikit = scikit.fillNA(dfScikit)
 
-start_time = time.time()
 dfScikit = scikit.applyPCA(dfScikit)
-end_time = time.time()
-elapsed_time2 = end_time - start_time
 
-# Print informations
+# Get the number of rows (samples) in the reduced data
 num_samples = dfScikit.shape[0]
-print(
-    f"Size of our dataSet when using scikit functions: {num_samples}")
-# Affichez la durée écoulée
-print(f"Durée écoulée : {elapsed_time2} secondes")
+print(num_samples)

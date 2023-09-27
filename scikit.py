@@ -1,4 +1,6 @@
 import preprocessing as prep
+import matplotlib.pyplot as plt
+import numpy as np
 from sklearn.feature_selection import SelectKBest
 from sklearn.feature_selection import f_classif
 from sklearn.preprocessing import StandardScaler, OrdinalEncoder
@@ -22,12 +24,10 @@ def preprocessing(df):
     df = prep.simplifyLocation(df)
     df = prep.simplifyRoute(df)
     # Scikit Encoder
-    colnames = ["Location", "Operator",
-                "AC Type", "Departure",
-                "Arrival", "cn/ln"]
-    encoder = OrdinalEncoder()
-    df[colnames] = encoder.fit_transform(df[colnames].values.reshape(-1, 1))
-
+    missing_values_mask = df.isnull().any()
+    cols_with_missing_values = missing_values_mask[missing_values_mask].index.tolist(
+    )
+    df = prep.encodeOrdinalColumns(df, cols_with_missing_values + ["Location"])
     return df
 
 
@@ -52,3 +52,8 @@ def applyPCA(df):
     # Fit PCA and transform the data (corrected)
     reducData_PCA = pca.fit_transform(df)
     return reducData_PCA
+
+
+def comparaison(df, pca_sklearn, pca_custom):
+    # comparaison graphique
+    return
