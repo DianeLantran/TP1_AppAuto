@@ -4,14 +4,12 @@ Created on Thu Sep 21 2023
 @author: diane
 """
 
-import pandas as pd
 import numpy as np
 from scipy.linalg import eigh
 
 
 def covarianceMat(dataset):
     covM = dataset.cov()
-    len(covM)
     return covM
 
 def dim_red(threshold, eigenvalues, eigenvectors):
@@ -34,19 +32,12 @@ def sort_vectP(eigenvalues, eigenvectors):
     sorted_eigenvectors = np.array(eigenvectors)[sorted_indices]
     return(sorted_eigenvectors)
 
-def remove_zero_columns(matrix):
-    # trouve les colones remplies par des 0
-    non_zero_columns = np.any(matrix != 0, axis=0)
-    # retourne la matrice sans les colones remplies de 0
-    result = matrix[:, non_zero_columns]
-    
-    return result
-
 def PCA(dataset, threshold):
     cov = covarianceMat(dataset)
     eigenvalues, eigenvectors = vect_P(cov)
     featureVect, new_eigen_values = dim_red(threshold, eigenvalues, eigenvectors)
-    newData = np.dot(featureVect, dataset.T)
+    sorted_eigenvectors = sort_vectP(new_eigen_values, featureVect)
+    newData = np.dot(dataset, np.array(sorted_eigenvectors).T)
     return(newData)
 
 
