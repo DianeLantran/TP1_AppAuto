@@ -5,7 +5,13 @@ from scipy.stats import chi2_contingency
 
 def crop(df):
     """
-    Select the 8 best column from a dataSet based on the chi2 method
+    Select the 8 best columns from a dataSet based on the chi-square test
+
+    Arguments: 
+    df: NumpyArray
+
+    Return: 
+    df_selected: NumpyArray
     """
     k = 8  # Number of columns to keep
     chi2_scores = []
