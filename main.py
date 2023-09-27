@@ -70,7 +70,7 @@ print(f"Durée écoulée : {elapsed_time1} secondes")
 # print(reducData_SB)
 
 # Visualisation du nouveau dataset
-reduced_df = pd.DataFrame(reducData_PCA, columns=['Colonne1', 'Colonne2', 'Colonne3', 'Colonne4', 'Colonne5', 'Colonne6', 'Colonne7', 'Colonne8', 'Colonne9'])
+reduced_df = pd.DataFrame(reducData_PCA, columns=['Colonne1', 'Colonne2', 'Colonne3', 'Colonne4', 'Colonne5', 'Colonne6', 'Colonne7', 'Colonne8'])
 fig = plt.figure()
 ax = fig.add_subplot(111)
 ax.scatter(reduced_df['Colonne1'], reduced_df['Colonne2'])
