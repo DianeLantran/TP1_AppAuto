@@ -74,23 +74,27 @@ print(f"Durée écoulée : {elapsed_time1} secondes")
 reduced_df = pd.DataFrame(reducData_PCA, columns=['Colonne1', 'Colonne2', 'Colonne3', 'Colonne4', 'Colonne5', 'Colonne6', 'Colonne7', 'Colonne8', 'Colonne9'])
 fig = plt.figure()
 ax = fig.add_subplot(111)
-ax.scatter(reduced_df['Colonne8'], reduced_df['Colonne9'])
-ax.set_xlabel('Colonne1')
-ax.set_ylabel('Colonne2')
+ax.scatter(reduced_df['Colonne1'], reduced_df['Colonne2'])
+ax.set_xlabel('Composante principale 1')
+ax.set_ylabel('Composante principale 2')
 plt.show()
 
 variance_origin = df.describe().iloc[2,:]
 variance_pca = reduced_df.describe().iloc[2,:]
-print(variance_origin)
-print(variance_pca)
 
-plt.stem(variance_origin)
-plt.title("Variance des colonnes du dataset avant PCA")
-plt.show()
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 4))
 
-plt.stem(variance_pca)
-plt.title("Variance des colonnes du dataset après PCA")
-plt.show()
+# Première figure (stem 1)
+ax1.stem(variance_origin)
+ax1.set_title('Variance des colonnes du dataset avant PCA')
+ax1.set_xlabel('Colonnes')
+ax1.set_ylabel('Variance')
+
+# Deuxième figure (stem 2)
+ax2.stem(variance_pca)
+ax2.set_title('Variance des colonnes du dataset après PCA')
+ax2.set_xlabel('Colonnes')
+ax2.set_ylabel('Variance')
 
 # Comparaison avec scikit-learn
 
